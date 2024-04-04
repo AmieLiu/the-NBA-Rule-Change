@@ -8,7 +8,7 @@ This paper delves into the implications of the 2022-23 NBA transitional foul rul
 
 The repo is structured as:
 
--   `data/raw_data` contains the raw data as obtained from X.
+-   `data/raw_data` contains the raw data as obtained from [Basketball Reference](https://www.basketball-reference.com/awards/awards_2023.html).
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
 -   `model` contains fitted models. 
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.
