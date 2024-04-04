@@ -1,14 +1,14 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "The Impact of the 2022-23 NBA Rule Change"
+subtitle: "Exploring the Relationship Between Player Shooting Performance, MVP Points, and the New Transitional Foul Rule"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Amie Liu
+thanks: "Code and data are available at: https://github.com/AmieLiu/the-NBA-Rule-Change.git."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Rule changes in professional basketball play a critical role in shaping both strategies and player performances. Specifically, the introduction of the transitional foul rule in the 2022-23 NBA season, which changes the way fouls are called during transition plays, could significantly affect players' shooting efficiency and their prospects for MVP awards. This paper examines the implications of this rule change, comparing player statistics between the 2022-23 and 2021-22 seasons. We find significant correlations between shooting efficiency and MVP points, highlighting the rule's influence on player recognition. This paper offers insights into the interplay between rule modifications, player performance, and individual accolades, underscoring the broader significance of adapting to regulatory shifts in professional sports."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -19,16 +19,23 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+In professional basketball, rule changes can reshape the game's landscape, altering strategies, player performances, and ultimately, the trajectory of teams' successes. The National Basketball Association (NBA), as the premier basketball league globally, often implements rule modifications to refine gameplay, increase scoring opportunities, and foster a more open and free-flowing style of basketball [@nba]. Under the new transitional foul rule in the 2022-23 NBA season, take fouls committed during transition scoring opportunities will result in one free throw and continued possession for the offended team [@rule], encouraging defenders to make legitimate plays. 
 
-The remainder of this paper is structured as follows. @sec-data....
 
+This paper analyzes the consequences of the 2022-23 NBA rule change, particularly its impact on player shooting performance and the dynamics of the Most Valuable Player (MVP) competition, comparing statistics with the previous season, 2021-22. Our estimand is to explore the relationship between player shooting performance and MVP points they won in these NBA seasons. We hypothesize that players who excel in transition offense may experience an increase in shooting efficiency as they capitalize on more fast-break opportunities without facing as many transition-take fouls, potentially leading to greater recognition in MVP voting due to the positive correlation between shooting efficiency and MVP consideration.
+
+A clear gap exists in understanding the nuanced impacts of the new transitional foul rule on player performance and MVP considerations, especially when compared to the previous season. This paper seeks to fill this gap by thoroughly analyzing the statistical data from both the 2022-23 and 2021-22 NBA seasons to highlight the changes, continuities, and emerging trends over these times.
+
+To address this gap, we used the R programming language [@citeR] to analyze shooting performance metrics, such as field goal percentage (FG%), three-point percentage (3P%), free throw percentage (FT%), as well as MVP voting points won from both seasons. Our findings reveal patterns in player shooting performance, MVP points accumulation, and the intertwined effects of the transitional foul rule… We discovered significant correlations between shooting efficiency and MVP points, with distinct variations observed between the two seasons.
+
+Understanding the implications of the transitional foul rule in comparison to the previous season is crucial for stakeholders across the NBA landscape, from players and coaches to researchers and fans. By illuminating the intricate relationship between rule changes, player performance, and individual accolades, this paper contributes to a deeper understanding of the evolving dynamics within the league.
+
+This paper is structured into three main sections: Data, Results, and Discussion. @sec-data Data explores sources and methodology. It includes various sources used for data collection, cleaning, and analyzing processes, drawing from the dataset. In @sec-results Results, we present our findings, focusing on data visualizations and analyses. @sec-discussion Discussion provides a comprehensive analysis of our research, highlights the implications for NBA basketball, the importance of limitations and considerations in our analysis, and identifies areas for future research. @sec-conclusion Conclusion summarizes our main findings and the broader significance of our research. 
 
 
 # Data {#sec-data}
@@ -40,13 +47,6 @@ Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 #| fig-cap: Bills of penguins
 #| echo: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
 ```
 
 Talk more about it.
@@ -74,7 +74,7 @@ Talk way more about it.
 
 
 
-# Model
+# Model {#sec-model}
 
 The goal of our modelling strategy is twofold. Firstly,...
 
@@ -103,7 +103,7 @@ We expect a positive relationship between the size of the wings and time spent a
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
@@ -112,8 +112,6 @@ Our results are summarized in @tbl-modelresults.
 #| eval: true
 #| warning: false
 #| message: false
-
-library(rstanarm)
 
 first_model <-
   readRDS(file = here::here("models/first_model.rds"))
@@ -126,19 +124,12 @@ first_model <-
 #| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
 #| warning: false
 
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
 ```
 
 
 
 
-# Discussion
+# Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
@@ -151,6 +142,10 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 ## Weaknesses and next steps
 
 Weaknesses and next steps should also be included.
+
+\newpage
+
+# Conclusion {#sec-conclusion}
 
 \newpage
 
@@ -169,47 +164,7 @@ In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. 
 
 In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
 
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
 
 
 
