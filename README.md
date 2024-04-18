@@ -4,6 +4,7 @@
 
 This paper examines the implications of the 2022-23 NBA transitional foul rule change on player shooting performance and MVP considerations. Our analysis explores the relationship between shooting efficiency, MVP points, and the implementation of the transitional foul rule, shedding light on how player recognition may be influenced.
 
+
 ## File Structure
 
 The repo is structured as:
