@@ -15,7 +15,8 @@ library(tidyverse)
 # Set a random seed
 set.seed(123)
 
-simulated_data2023 <-
+# The 2021-22 and 2022-23 seasons will have the same type of dataset, but the values will be different
+simulated_data <-
   tibble(
     # Use 1 through to 10 to represent each rank
     "Rank" = 1:10,
@@ -29,4 +30,4 @@ simulated_data2023 <-
     "Free Throw Percentage" = round(runif(10, min = 0, max = 1) * 1000) / 1000
   )
 
-simulated_data2023
+simulated_data

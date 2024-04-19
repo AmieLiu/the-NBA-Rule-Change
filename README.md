@@ -19,7 +19,7 @@ The repo is structured as:
 
 ## Statement on LLM usage
 
-In this paper, ChatGPT 4.0 was used. It helped to address code issues during data analysis. It was also used to brainstorm ideas proofread, and write some parts of the paper. The entire chat is available at: inputs/llm/usage.txt.
+In this paper, ChatGPT 4.0 was used. It helped to address code issues during data analysis. It was also used to brainstorm ideas, proofread, and write some parts of the paper. The entire chat is available at: inputs/llm/usage.txt.
 
 
 ## Some checks
