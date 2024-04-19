@@ -1,26 +1,20 @@
 #### Preamble ####
-# Purpose: Downloads and saves the data from [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Downloads and saves the data from Basketball Reference
+# Author: Amie Liu
+# Date: 19 April 2024
+# Contact: amie.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: None
 
 
-#### Workspace setup ####
-library(opendatatoronto)
-library(tidyverse)
-# [...UPDATE THIS...]
+#### Download and save data ####
+# Data is accessed from Basketball Reference website: https://www.basketball-reference.com/awards/awards_2023.html, https://www.basketball-reference.com/awards/awards_2022.html
+# Data needs to be downloaded manually
+# To download the data, I followed the instruction from Sports Reference Blog: https://www.sports-reference.com/blog/2016/11/exporting-data/
+# 1. Select "Get table as CSV (for Excel)" under the "Share & more" tab
+# 2. Copy and paste the entire table to Microsoft Excel
+# 3. Select "text to columns" function under the "Data" tab in Microsoft Excel
+# 4. Choose the delimiter "comma"
+# 5. Finish "text to columns" function
+# 6. Save the table as .csv file in the project data file
 
-#### Download data ####
-# [...ADD CODE HERE TO DOWNLOAD...]
-
-
-
-#### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
-
-         

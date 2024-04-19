@@ -1,44 +1,57 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleans the 2021-22 and 2022-23 NBA Most Valuable Player datasets
+# Author: Amie Liu
+# Date: 19 April 2024
+# Contact: amie.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: 
+#   01-download_data.R
+
 
 #### Workspace setup ####
 library(tidyverse)
+library(dplyr)
+library(janitor)
 
-#### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+#### Read in data ####
+raw_data2023 <- read_csv("data/raw_data/2022-23_raw_data.csv")
+raw_data2022 <- read_csv("data/raw_data/2021-22_raw_data.csv")
 
-cleaned_data <-
-  raw_data |>
+
+#### Clean 2022-23 Data ####
+cleaned_data2023 <-
+  # select specific rows and columns
+  raw_data2023[2:11,c(1, 6, 16, 17, 18)] |>
   janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
+  # rename columns' names
+  rename(
+    rank = x1,
+    points_won = voting_6,
+    field_goal_percentage = shooting_16,
+    three_points_percentage = shooting_17,
+    free_throw_percentage = shooting_18
+  )
+
+
+#### Clean 2021-22 Data ####
+cleaned_data2022 <-
+  # select specific rows and columns
+  raw_data2022[2:11,c(1, 6, 16, 17, 18)] |>
+  janitor::clean_names() |>
+  # rename column names
+  rename(
+    rank = x1,
+    points_won = voting_6,
+    field_goal_percentage = shooting_16,
+    three_points_percentage = shooting_17,
+    free_throw_percentage = shooting_18
   ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
+  # Replace rank 10T to 10
   mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+    rank = if_else(rank == "10T", "10", rank)
+  )
+
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+write_csv(cleaned_data2023, "data/analysis_data/analysis_data2023.csv")
+write_csv(cleaned_data2022, "data/analysis_data/analysis_data2022.csv")
