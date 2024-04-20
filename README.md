@@ -2,7 +2,7 @@
 
 ## Overview
 
-This paper examines the implications of the 2022-23 NBA transitional foul rule change on player shooting performance and MVP considerations. Our analysis explores the relationship between shooting efficiency, MVP points, and the implementation of the transitional foul rule, shedding light on how player recognition may be influenced.
+This paper examines the implications of the 2022-23 NBA transitional foul rule change on player shooting performance and MVP considerations. My analysis explores the relationship between shooting efficiency, MVP points, and the implementation of the transitional foul rule, shedding light on how player recognition may be influenced.
 
 
 ## File Structure
@@ -19,7 +19,7 @@ The repo is structured as:
 
 ## Statement on LLM usage
 
-In this paper, ChatGPT 4.0 was used. It helped to address code issues during data analysis. It was also used to brainstorm ideas, proofread, and write some parts of the paper. The entire chat is available at: inputs/llm/usage.txt.
+In this paper, I used ChatGPT 4.0. It helped to address code issues during data analysis. It was also used to brainstorm ideas, proofread, and write some parts of the paper. The entire chat is available at: inputs/llm/usage.txt.
 
 
 ## Some checks
