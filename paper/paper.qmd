@@ -20,6 +20,8 @@ bibliography: references.bib
 
 library(tidyverse)
 library(knitr)
+library(dplyr)
+library(cowplot)
 
 # Read data
 analyzed_data2023 <- read_csv("../data/analysis_data/analysis_data2023.csv")
@@ -47,7 +49,7 @@ Some of our data is of penguins (see @tbl-table2023 and @tbl-table2022).
 
 ```{r}
 #| label: tbl-table2023
-#| tbl-cap: 2022-2023 season most valuable player dataset
+#| tbl-cap: 2022-2023 season most valuable player table 
 #| echo: false
 #| warning: false
 
@@ -61,7 +63,7 @@ analyzed_data2023 |>
 
 ```{r}
 #| label: tbl-table2022
-#| tbl-cap: 2021-2022 season most valuable player dataset
+#| tbl-cap: 2021-2022 season most valuable player table
 #| echo: false
 #| warning: false
 
@@ -97,7 +99,6 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 Talk way more about it. 
 
 
-
 # Model {#sec-model}
 
 The goal of our modelling strategy is twofold. Firstly,...
@@ -129,7 +130,7 @@ We can use maths by including latex between dollar signs, for instance $\theta$.
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults.
+Our results are summarized in @tbl-modelresults. (see @fig-points)
 
 ```{r}
 #| echo: false
@@ -150,6 +151,117 @@ first_model <-
 
 ```
 
+```{r}
+#| label: fig-points
+#| fig-cap: Number of MVP points won by each player from the top 10 rankings in the 2021-22 and 2022-23 seasons
+#| fig.width: 8 
+#| echo: false
+#| warning: false
+#| message: false
+
+# Create a bar chart to visualize the distribution of MVP points won by rank based on the analyzed_data2023 and analyzed_data2022 datasets
+
+# Add a "Season" column to the 2022-23 dataset
+analyzed_data2023 <- analyzed_data2023 |>
+  mutate(season = "2022-23")
+
+# Add a "Season" column to the 2021-22 dataset
+analyzed_data2022 <- analyzed_data2022 |>
+  mutate(season = "2021-22")
+
+# Combine the 2022-23 and 2021-22 datasets
+combined_data <- bind_rows(analyzed_data2023, analyzed_data2022)
+
+# Create the bar plot with rank on the x-axis and season as fill color
+combined_data |>
+  ggplot(aes(x = factor(rank), fill = factor(season))) +
+  # Add a grouped bar layer to create the grouped bar chart
+  geom_bar(position = "dodge", aes(y = points_won), stat = "identity") +
+  # Add text labels for the number of points won on top of each bar
+  geom_text(aes(label = points_won, y = points_won), vjust = -0.5, size = 3, position = position_dodge(width = 0.9)) +
+  # Scale the x-axis labels to display "Rank"
+  scale_x_discrete("Rank") +
+  # Scale the fill color to display "season" and specify the break points: 2021-22 Season", "2022-23 Season"
+  scale_fill_discrete(name = "Season",
+                      breaks = c("2021-22", "2022-23"),
+                      labels = c("2021-22 Season", "2022-23 Season")) +
+  # Apply a minimal theme to the chart
+  theme_minimal() +
+  # Label y-axis as "Number of MVP Points Won"
+  labs(y = "Number of MVP Points Won")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Create the scatter plot with trend line or smoothed line for "field_goal_percentage"
+scatterplot1 <- 
+  ggplot(combined_data, aes(x = rank, y = field_goal_percentage, color = season)) +
+  geom_point() +  # Add points for each data point
+  geom_smooth(method = "lm", se = FALSE) +  # Add a trend line (linear regression)
+  # Scale the x-axis labels to display "Rank"
+  scale_x_continuous(breaks = 1:10, labels = 1:10) +
+  # Scale the y-axis labels to display "Field Goal Percentage"
+  scale_y_continuous("Field Goal Percentage") +
+  # Change legend title, position, and x-axis
+  labs(color = "Season", x = "Rank") +
+  theme_minimal()
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Create the scatter plot with trend line or smoothed line for "three_points_percentage"
+scatterplot2 <- 
+  ggplot(combined_data, aes(x = rank, y = three_points_percentage, color = season)) +
+  geom_point() +  # Add points for each data point
+  geom_smooth(method = "lm", se = FALSE) +  # Add a trend line (linear regression)
+  # Scale the x-axis labels to display "Rank"
+  scale_x_continuous(breaks = 1:10, labels = 1:10) +
+  # Scale the y-axis labels to display "Three Points Percentage"
+  scale_y_continuous("Three Points Percentage") +
+  # Change legend title,  position, and x-axis
+  labs(color = "Season", x = "Rank") +
+  theme_minimal()
+
+```
+
+see (@fig-percentage)
+
+```{r}
+#| label: fig-percentage
+#| fig-cap: "Different shooting percentage by each player from the top 10 rankings in the 2021-22 and 2022-23 seasons"
+#| fig.height: 10
+#| fig.width: 8 
+#| echo: false
+#| warning: false
+#| message: false
+
+# Create the scatter plot with trend line or smoothed line for "free_throw_percentage"
+scatterplot3 <-
+  ggplot(combined_data, aes(x = rank, y = free_throw_percentage, color = season)) +
+  geom_point() +  # Add points for each data point
+  geom_smooth(method = "lm", se = FALSE) +  # Add a trend line (linear regression)
+  # Scale the x-axis labels to display "Rank"
+  scale_x_continuous(breaks = 1:10, labels = 1:10) +
+  # Scale the y-axis labels to display "Free Throw Percentage"
+  scale_y_continuous("Free Throw Percentage") +
+  # Change legend title, position, and x-axis
+  labs(color = "Season", x = "Rank") +
+  theme_minimal()
+
+# Create the combined plot
+combined_plot <- plot_grid(scatterplot1, scatterplot2, scatterplot3, ncol = 1)
+
+combined_plot
+
+```
 
 
 
