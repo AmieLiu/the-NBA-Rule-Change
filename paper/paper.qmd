@@ -1,6 +1,6 @@
 ---
 title: "The Impact of the 2022-23 NBA Rule Change"
-subtitle: "Exploring the Relationship Between Player Shooting Performance, MVP Points, and the New Transitional Foul Rule"
+subtitle: "Exploring the Relationship Between the New Transitional Foul Rule, Player Shooting Performance, and MVP Points"
 author: 
   - Amie Liu
 thanks: "Code and data are available at: https://github.com/AmieLiu/the-NBA-Rule-Change.git."
@@ -19,6 +19,11 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
+library(knitr)
+
+# Read data
+analyzed_data2023 <- read_csv("../data/analysis_data/analysis_data2023.csv")
+analyzed_data2022 <- read_csv("../data/analysis_data/analysis_data2022.csv")
 ```
 
 
@@ -29,9 +34,7 @@ In professional basketball, rule changes can reshape the game's landscape, alter
 
 This paper analyzes the consequences of the 2022-23 NBA rule change, particularly its impact on player shooting performance and the dynamics of the Most Valuable Player (MVP) competition, comparing statistics with the previous season, 2021-22. Our estimand is to explore the relationship between player shooting performance and MVP points they won in these NBA seasons. We hypothesize that players who excel in transition offense may experience an increase in shooting efficiency as they capitalize on more fast-break opportunities without facing as many transition-take fouls, potentially leading to greater recognition in MVP voting due to the positive correlation between shooting efficiency and MVP consideration.
 
-A clear gap exists in understanding the nuanced impacts of the new transitional foul rule on player performance and MVP considerations, especially when compared to the previous season. This paper seeks to fill this gap by thoroughly analyzing the statistical data from both the 2022-23 and 2021-22 NBA seasons to highlight the changes, continuities, and emerging trends over these times.
-
-To address this gap, we used the R programming language [@citeR] to analyze shooting performance metrics, such as field goal percentage (FG%), three-point percentage (3P%), free throw percentage (FT%), as well as MVP voting points won from both seasons. Our findings reveal patterns in player shooting performance, MVP points accumulation, and the intertwined effects of the transitional foul rule… We discovered significant correlations between shooting efficiency and MVP points, with distinct variations observed between the two seasons.
+A clear gap exists in understanding the nuanced impacts of the new transitional foul rule on player performance and MVP considerations, especially when compared to the previous season. This paper seeks to fill this gap by thoroughly analyzing the statistical data from both the 2022-23 and 2021-22 NBA seasons to highlight the changes, continuities, and emerging trends over these times. To address this gap, we used the R programming language [@citeR] to analyze shooting performance metrics, such as field goal percentage (FG%), three-point percentage (3P%), free throw percentage (FT%), as well as MVP voting points won from both seasons. Our findings reveal patterns in player shooting performance, MVP points accumulation, and the intertwined effects of the transitional foul rule… We discovered significant correlations between shooting efficiency and MVP points, with distinct variations observed between the two seasons.
 
 Understanding the implications of the transitional foul rule in comparison to the previous season is crucial for stakeholders across the NBA landscape, from players and coaches to researchers and fans. By illuminating the intricate relationship between rule changes, player performance, and individual accolades, this paper contributes to a deeper understanding of the evolving dynamics within the league.
 
@@ -40,13 +43,34 @@ This paper is structured into three main sections: Data, Results, and Discussion
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+Some of our data is of penguins (see @tbl-table2023 and @tbl-table2022).
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: tbl-table2023
+#| tbl-cap: 2022-2023 season most valuable player dataset
 #| echo: false
+#| warning: false
 
+# Display the "analyzed_data2023" dataset
+analyzed_data2023 |>
+  kable(
+    # Give each column a name
+    col.names = c("Rank", "MVP Points Won", "Field Goal Percentage", "Three Points Percentage", "Free Throw Percentage")
+  )
+```
+
+```{r}
+#| label: tbl-table2022
+#| tbl-cap: 2021-2022 season most valuable player dataset
+#| echo: false
+#| warning: false
+
+# Display the "analyzed_data2022" dataset
+analyzed_data2022 |>
+  kable(
+    # Give each column a name
+    col.names = c("Rank", "MVP Points Won", "Field Goal Percentage", "Three Points Percentage", "Free Throw Percentage")
+  )
 ```
 
 Talk more about it.
@@ -60,14 +84,14 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+#analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+#analysis_data |> 
+#  ggplot(aes(x = width, y = length)) +
+#  geom_point(alpha = 0.8) +
+#  theme_minimal() +
+#  labs(x = "Wing width (mm)",
+#       y = "Wing length (mm)")
 ```
 
 Talk way more about it. 
@@ -145,12 +169,13 @@ Weaknesses and next steps should also be included.
 
 \newpage
 
+
 # Conclusion {#sec-conclusion}
 
 \newpage
 
-\appendix
 
+\appendix
 # Appendix {-}
 
 
