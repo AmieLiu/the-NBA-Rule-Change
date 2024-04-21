@@ -1,11 +1,12 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Models data to predict total MVP voting points based on shooting performance (Field Goal Percentage, Three-Point Percentage, and Free Throw Percentage)
+# Author: Amie Liu
+# Date: 21 April 2024
+# Contact: amie.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites:
+#   01-download_data.R
+#   02-data_cleaning.R
 
 
 #### Workspace setup ####
@@ -13,25 +14,20 @@ library(tidyverse)
 library(rstanarm)
 
 #### Read data ####
-analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
+analyzed_data2023 <- read_csv("data/analysis_data/analysis_data2023.csv")
+
 
 ### Model data ####
-first_model <-
-  stan_glm(
-    formula = flying_time ~ length + width,
-    data = analysis_data,
-    family = gaussian(),
-    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 853
-  )
+# Fit a linear regression model to predict 'points_won' using FG%, 3P%, and FT%
+model2023 <- lm(points_won ~ field_goal_percentage + three_points_percentage + free_throw_percentage, data = analyzed_data2023)
+
+# Check the summary of the model to understand the fit and see the coefficients
+summary(model2023)
 
 
-#### Save model ####
+### Save model ####
 saveRDS(
-  first_model,
-  file = "models/first_model.rds"
+  model2023,
+  file = "models/model2023.rds"
 )
-
 

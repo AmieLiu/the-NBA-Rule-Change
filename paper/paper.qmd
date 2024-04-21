@@ -79,78 +79,10 @@ Talk more about it.
 
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
-
-#analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-#analysis_data |> 
-#  ggplot(aes(x = width, y = length)) +
-#  geom_point(alpha = 0.8) +
-#  theme_minimal() +
-#  labs(x = "Wing width (mm)",
-#       y = "Wing length (mm)")
-```
-
 Talk way more about it. 
 
-
-# Model {#sec-model}
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
-
-# Results {#sec-results}
-
-Our results are summarized in @tbl-modelresults. (see @fig-points)
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-```
-
+## Data Visualization
+### The distribution of MVP points won by top 10 players in the 2021-22 and 2022-23 seasons
 ```{r}
 #| label: fig-points
 #| fig-cap: Number of MVP points won by each player from the top 10 rankings in the 2021-22 and 2022-23 seasons
@@ -192,6 +124,7 @@ combined_data |>
 
 ```
 
+### Different shooting performances by top 10 players in the 2021-22 and 2022-23 seasons
 ```{r}
 #| echo: false
 #| warning: false
@@ -232,8 +165,6 @@ scatterplot2 <-
 
 ```
 
-see (@fig-percentage)
-
 ```{r}
 #| label: fig-percentage
 #| fig-cap: "Different shooting percentage by each player from the top 10 rankings in the 2021-22 and 2022-23 seasons"
@@ -263,6 +194,101 @@ combined_plot
 
 ```
 
+
+
+# Model {#sec-model}
+
+The goal of our modelling strategy is twofold. Firstly,...
+
+Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+
+## Model set-up
+
+Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
+
+\begin{align} 
+y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
+\mu_i &= \alpha + \beta_i + \gamma_i\\
+\alpha &\sim \mbox{Normal}(0, 2.5) \\
+\beta &\sim \mbox{Normal}(0, 2.5) \\
+\gamma &\sim \mbox{Normal}(0, 2.5) \\
+\sigma &\sim \mbox{Exponential}(1)
+\end{align}
+
+We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+
+
+### Model justification
+
+We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+
+We can use maths by including latex between dollar signs, for instance $\theta$.
+
+
+# Results {#sec-results}
+
+Our results are summarized in @tbl-modelresults. (see @fig-points)
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+
+model2023 <-
+  readRDS(file = "../models/model2023.rds")
+
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-modelresults
+#| tbl-cap: "Summary of the model results"
+#| warning: false
+
+# Create a data frame containing the model summary information
+model_summary <- tibble(
+  "Variable" = c("(Intercept)", "field_goal_percentage", "three_points_percentage", "free_throw_percentage"),
+  "Estimate" = c(-4628, 7399, 7410, -1640),
+  "Std. Error" = c(2004, 1994, 3740, 1417),
+  "t value" = c(-2.310, 3.712, 1.981, -1.158),
+  "Pr(>|t|)" = c(0.06028, 0.00995, 0.09485, 0.29093)
+)
+
+# Convert the data frame to a modelsummary table
+summary_table <- modelsummary(model_summary)
+
+summary_table
+
+```
+
+```{r}
+#| label: fig-modelresults
+#| fig-cap: "Observed vs. predicted values of MVP points won"
+#| fig.height: 10
+#| fig.width: 8 
+#| echo: false
+#| warning: false
+#| message: false
+
+# Diagnostic plots
+par(mfrow = c(2, 2))  # Arrange plots in a 2x2 grid
+plot(model2023)  # Generate plots
+
+# Create a data frame of observed vs. predicted values
+predicted_values <- data.frame(Observed = analyzed_data2023$points_won, 
+                               Predicted = predict(model2023))
+
+# Plot observed vs. predicted values
+ggplot(predicted_values, aes(x = Observed, y = Predicted)) +
+  geom_point() +
+  geom_abline(color = "red", linetype = "dashed") +  # Line x=y for reference
+  labs(title = "Observed vs. Predicted MVP Voting Points",
+       x = "Observed Points",
+       y = "Predicted Points") +
+  theme_minimal()
+```
 
 
 # Discussion {#sec-discussion}
