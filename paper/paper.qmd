@@ -22,7 +22,7 @@ library(tidyverse)
 library(knitr)
 library(dplyr)
 library(cowplot)
-
+library(broom)
 
 # Read data
 analyzed_data2023 <- read_csv("../data/analysis_data/analysis_data2023.csv")
@@ -140,7 +140,7 @@ scatterplot1 <-
   # Scale the y-axis labels to display "Field Goal Percentage"
   scale_y_continuous("Field Goal Percentage") +
   # Change legend title, position, and x-axis
-  labs(color = "Season", x = "Rank") +
+  labs(title = "Field Goal Percentage by Rank", color = "Season", x = "Rank") +
   theme_minimal()
 ```
 
@@ -159,7 +159,7 @@ scatterplot2 <-
   # Scale the y-axis labels to display "Three Points Percentage"
   scale_y_continuous("Three Points Percentage") +
   # Change legend title,  position, and x-axis
-  labs(color = "Season", x = "Rank") +
+  labs(title = "Three Points Percentage by Rank", color = "Season", x = "Rank") +
   theme_minimal()
 ```
 
@@ -182,7 +182,7 @@ scatterplot3 <-
   # Scale the y-axis labels to display "Free Throw Percentage"
   scale_y_continuous("Free Throw Percentage") +
   # Change legend title, position, and x-axis
-  labs(color = "Season", x = "Rank") +
+  labs(title = "Free Throw Percentage by Rank", color = "Season", x = "Rank") +
   theme_minimal()
 
 # Create the combined plot
@@ -236,12 +236,59 @@ model2023 <-
   readRDS(file = "../models/model2023.rds")
 ```
 
+```{r}
+#| label: tbl-coefficients
+#| tbl-cap: "Summary of regression model coefficients"
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
 
+# Generate a tidy summary of the model
+model_summary <- tidy(model2023) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    `Std. Error` = std.error,
+    Statistic = statistic,
+    `P-value` = p.value,
+  ) |>
+  # Rename the "Term" values
+  mutate(
+    Term =
+      case_match(
+        Term,
+        "(Intercept)" ~ "(Intercept)",
+        "field_goal_percentage" ~ "Field Goal Percentage",
+        "three_points_percentage" ~ "Three Points Percentage",
+        "free_throw_percentage" ~ "Free Throw Percentage"
+        )
+    )
+
+# Use knitr's kable function to format tables
+kable(model_summary)
+```
+
+```{r}
+#| label: tbl-additional
+#| tbl-cap: "Summary of additional regression model metrics"
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+
+# Include additional model metrics
+additional_metrics <- data.frame(
+  Metric = c("Residual Standard Error", "Multiple R-squared", "Adjusted R-squared", "F-statistic", "p-value"),
+  Value = c("314.3", "0.4446", "0.1669", "1.601", "0.2852")
+)
+
+kable(additional_metrics)
+```
 
 ```{r}
 #| label: fig-modelresults
 #| fig-cap: "Observed vs. predicted values of MVP points won"
-#| fig.height: 10
 #| fig.width: 8 
 #| echo: false
 #| warning: false
@@ -260,8 +307,7 @@ observed_predicted_values <-
   ggplot(predicted_values, aes(x = Observed, y = Predicted)) +
   geom_point() +
   geom_abline(color = "red", linetype = "dashed") +  # Line x=y for reference
-  labs(title = "Observed vs. Predicted MVP Voting Points",
-       x = "Observed Points",
+  labs(x = "Observed Points",
        y = "Predicted Points") +
   theme_minimal()
 
