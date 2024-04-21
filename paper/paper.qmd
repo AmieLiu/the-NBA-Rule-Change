@@ -22,6 +22,9 @@ library(tidyverse)
 library(knitr)
 library(dplyr)
 library(cowplot)
+library(modelsummary)
+library(kableExtra)
+
 
 # Read data
 analyzed_data2023 <- read_csv("../data/analysis_data/analysis_data2023.csv")
@@ -247,20 +250,13 @@ model2023 <-
 #| tbl-cap: "Summary of the model results"
 #| warning: false
 
-# Create a data frame containing the model summary information
-model_summary <- tibble(
-  "Variable" = c("(Intercept)", "field_goal_percentage", "three_points_percentage", "free_throw_percentage"),
-  "Estimate" = c(-4628, 7399, 7410, -1640),
-  "Std. Error" = c(2004, 1994, 3740, 1417),
-  "t value" = c(-2.310, 3.712, 1.981, -1.158),
-  "Pr(>|t|)" = c(0.06028, 0.00995, 0.09485, 0.29093)
+# Generate a summary table with numerical values formatted to 2 decimal places
+model_table <- modelsummary(
+  list("2022-23 Season" = model2023),
+  fmt = 2
 )
 
-# Convert the data frame to a modelsummary table
-summary_table <- modelsummary(model_summary)
-
-summary_table
-
+model_table
 ```
 
 ```{r}
