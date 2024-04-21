@@ -22,8 +22,6 @@ library(tidyverse)
 library(knitr)
 library(dplyr)
 library(cowplot)
-library(modelsummary)
-library(kableExtra)
 
 
 # Read data
@@ -124,7 +122,6 @@ combined_data |>
   theme_minimal() +
   # Label y-axis as "Number of MVP Points Won"
   labs(y = "Number of MVP Points Won")
-
 ```
 
 ### Different shooting performances by top 10 players in the 2021-22 and 2022-23 seasons
@@ -145,7 +142,6 @@ scatterplot1 <-
   # Change legend title, position, and x-axis
   labs(color = "Season", x = "Rank") +
   theme_minimal()
-
 ```
 
 ```{r}
@@ -165,7 +161,6 @@ scatterplot2 <-
   # Change legend title,  position, and x-axis
   labs(color = "Season", x = "Rank") +
   theme_minimal()
-
 ```
 
 ```{r}
@@ -194,7 +189,6 @@ scatterplot3 <-
 combined_plot <- plot_grid(scatterplot1, scatterplot2, scatterplot3, ncol = 1)
 
 combined_plot
-
 ```
 
 
@@ -230,7 +224,7 @@ We can use maths by including latex between dollar signs, for instance $\theta$.
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults. (see @fig-points)
+Our results are summarized in @tbl-modelresults. (see @fig-points and @fig-modelresults)
 
 ```{r}
 #| echo: false
@@ -240,24 +234,9 @@ Our results are summarized in @tbl-modelresults. (see @fig-points)
 
 model2023 <-
   readRDS(file = "../models/model2023.rds")
-
 ```
 
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Summary of the model results"
-#| warning: false
 
-# Generate a summary table with numerical values formatted to 2 decimal places
-model_table <- modelsummary(
-  list("2022-23 Season" = model2023),
-  fmt = 2
-)
-
-model_table
-```
 
 ```{r}
 #| label: fig-modelresults
@@ -269,21 +248,24 @@ model_table
 #| message: false
 
 # Diagnostic plots
-par(mfrow = c(2, 2))  # Arrange plots in a 2x2 grid
-plot(model2023)  # Generate plots
+#par(mfrow = c(2, 2))  # Arrange plots in a 2x2 grid
+#plot(model2023)  # Generate plots
 
 # Create a data frame of observed vs. predicted values
 predicted_values <- data.frame(Observed = analyzed_data2023$points_won, 
                                Predicted = predict(model2023))
 
 # Plot observed vs. predicted values
-ggplot(predicted_values, aes(x = Observed, y = Predicted)) +
+observed_predicted_values <-
+  ggplot(predicted_values, aes(x = Observed, y = Predicted)) +
   geom_point() +
   geom_abline(color = "red", linetype = "dashed") +  # Line x=y for reference
   labs(title = "Observed vs. Predicted MVP Voting Points",
        x = "Observed Points",
        y = "Predicted Points") +
   theme_minimal()
+
+observed_predicted_values
 ```
 
 
