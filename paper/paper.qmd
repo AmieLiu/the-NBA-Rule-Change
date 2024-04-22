@@ -46,11 +46,15 @@ This paper is structured into three main sections: Data, Results, and Discussion
 
 # Data {#sec-data}
 
-Some of our data is of penguins (see @tbl-table2023 and @tbl-table2022).
+The data for this paper are obtained from Basketball Reference [@basketball], which provides a wide range of basketball-related data that includes statistics, player and team information, game results, and more. The datasets used here are @basketball2023 and @basketball2022. These datasets include various statistics and information about NBA players who received votes for the MVP award, as well as their performance metrics for the 2022-23 and 2021-22 seasons. The data analysis involved using the R programming language [@citeR], along with the `tidyverse` [@citeTidyverse], `janitor` [@citeJanitor], `knitr` [@citeKnitr], `cowplot` [@cowplot], `broom` [@broom], and `rstanarm` [@rstanarm] packages for data collection, cleaning, analysis, and statistical modeling. Within the `tidyverse` package [@citeTidyverse], I used `readr` [@citeReadr], `dplyr` [@citeDplyr], `tidyr` [@citeTidyr], and `ggplot2` [@citeGgplot2] for reading CSV files, manipulating data, tidying data, and creating figures.
+
+## NBA 2021-22 and 2022-23 Seasons Top 10 MVP Data
+
+@tbl-table2023 presents the performance metrics of NBA players who received votes for the Most Valuable Player (MVP) award in the 2022-23 season. It includes a total of 10 rows and five variables: ranking of the top 10 players (Rank), the total number of MVP points won by each player (MVP Points Won), FG% (Field Goal Percentage), TP% (Three-Point Percentage), and FT% (Free Throw Percentage).
 
 ```{r}
 #| label: tbl-table2023
-#| tbl-cap: 2022-2023 season most valuable player table 
+#| tbl-cap: 2022-2023 season top 10 MVP table 
 #| echo: false
 #| warning: false
 
@@ -62,9 +66,13 @@ analyzed_data2023 |>
   )
 ```
 
+Field Goal Percentage indicates the efficiency of a player's shooting from the field, calculated as the ratio of successful field goals made to total field goal attempts. A higher field goal percentage suggests better shooting accuracy. Moreover, Three Points Percentage indicates the accuracy of a player's three-point shooting, measured as the percentage of successful three-point shots made out of total attempts. A higher three-point percentage reflects proficiency in long-range shooting. In addition, Free Throw Percentage represents the proficiency of a player in making free throws, calculated as the ratio of successful free throws made to total free throw attempts. A higher free throw percentage indicates better accuracy and consistency in free throw shooting.
+
+@tbl-table2022 presents performance metrics of NBA players who received votes for the MVP award during the 2021-22 season. This dataset mirrors the structure of the previously mentioned dataset (see @tbl-table2023), providing insights into key performance indicators for players in the 2021-22 season.
+
 ```{r}
 #| label: tbl-table2022
-#| tbl-cap: 2021-2022 season most valuable player table
+#| tbl-cap: 2021-2022 season top 10 MVP table
 #| echo: false
 #| warning: false
 
@@ -76,14 +84,17 @@ analyzed_data2022 |>
   )
 ```
 
-Talk more about it.
+## Data Measurement
 
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-Talk way more about it. 
+The measurement process quantifies real-world phenomena related to NBA player performance and translates them into dataset entries. We focused on performance metrics during the 2021-22 and 2022-23 seasons, including field goal percentage, three-point percentage, and free throw percentage. Data were collected from reputable sources like @basketball. These raw data were then processed and cleaned to ensure accuracy and consistency. The selected variables were defined and operationalized. For example, field goal percentage was calculated as the ratio of successful field goals made to attempts. Similarly, three-point and free throw percentages were computed using standardized formulas. These measurements became dataset entries, with rows representing players and columns representing performance metrics.
 
 ## Data Visualization
 ### The distribution of MVP points won by top 10 players in the 2021-22 and 2022-23 seasons
+
+@fig-points illustrates the MVP points won by the top 10 NBA players in each of the 2022-23 and 2021-22 seasons. It clearly shows that the highest number of MVP points, which totaled 915, was given to the player who ranked 1st in the 2022-23 season. In contrast, the minimum point (1 point) was given to the player who ranked 10th in the 2021-22 season.
+
+When examining the MVP points across the corresponding ranks in both seasons, players in seven out of the ten ranks during the 2022-23 season received more points than their counterparts in the same ranks during the 2021-22 season. The top ranks in the 2022-23 season (Rank 1, 3, 4) generally received more points than in the previous season. This might indicate a shift in voting behavior or a stronger consensus among voters regarding the leading candidates. Players at lower ranks (6-10) showed a relatively small variation in points, suggesting that while the top contenders might shift significantly in performance or perception, those at lower ranks maintain a more consistent level of recognition.
+
 ```{r}
 #| label: fig-points
 #| fig-cap: Number of MVP points won by each player from the top 10 rankings in the 2021-22 and 2022-23 seasons
@@ -125,6 +136,15 @@ combined_data |>
 ```
 
 ### Different shooting performances by top 10 players in the 2021-22 and 2022-23 seasons
+
+@fig-percentage provides a comparison of the shooting performances of the top 10 NBA players across 2022-23 and 2021-22 seasons, including Field Goal, Three-Point, and Free Throw percentages. Each metric is depicted with trend lines to illustrate the general trends across player ranks from 1 to 10.
+
+The highest Field Goal Percentage observed was 0.632 in the 2022-23 season. In contrast, the lowest percentage was recorded at 0.437 in the 2021-22 season. The trend lines show that the 2022-23 season has higher percentages across the ranks compared to the previous season, despite a slight decline in percentage from the highest to the lowest ranked players in both seasons. This means there is an enhancement in field goal accuracy from the 2021-22 season to the 2022-23 season.
+
+For the Three-Point Percentage, the highest was recorded at 0.427 in the 2022-23 season, while the lowest was also observed in the same season at 0.275. Interestingly, the trend line for 2022-23 shows a slight increase as player rank increases, unlike in 2021-22, where the trend line remains relatively flat across ranks. There is a marginal increase in three-point shooting percentages in the 2022-23 season
+
+The scatter plot for Free Throw Percentage shows the highest performance at 0.923 in the 2021-22 season and the lowest at 0.645 in the 2022-23 season. Both seasons exhibit a slight upward trend in free throw efficiency from rank 1 to 10. The free throw percentage remains nearly constant in both seasons, with a minimal increase in the 2021-22 season.
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -225,7 +245,7 @@ Statistical significance of the model coefficients will be tested using t-tests,
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults. (see @fig-points and @fig-modelresults)
+Our results are summarized in @tbl-coefficients and @tbl-additional (see @fig-modelresults)
 
 ```{r}
 #| echo: false
