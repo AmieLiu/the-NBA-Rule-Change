@@ -192,34 +192,35 @@ combined_plot
 ```
 
 
-
 # Model {#sec-model}
 
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+To explore the impact of the 2022-23 NBA transitional foul rule on player shooting performance and its subsequent effect on MVP voting, we constructed a linear regression model. The objective is to quantify the relationship between shooting performance metrics and MVP voting outcomes.
 
 ## Model set-up
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
+The dependent variable is MVP Voting Points and the independent variables are Field Goal Percentage (FG%), Three-Point Field Goal Percentage (3P%), and Free Throw Percentage (FT%). Each independent variable was chosen based on its potential influence on a player's performance under the conditions created by the new foul rule. We run the model in R [@citeR] utilizing the `rstanarm` package [@rstanarm]. Our model is constructed as follows:
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
+$$
+Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_3 + \epsilon
+$$
 
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+where:
 
+- $Y$ is the MVP Voting Points. It is the dependent variable that represents the points a player receives in the MVP voting process.
+- $\beta_0$ is the intercept of the regression model that represents the expected value of Total MVP Voting Points when all predictor variables (FG%, 3P%, FT%) are at zero.
+- $\beta_1$ is the coefficient for FG%. It indicates how changes in a player’s overall shooting efficiency from the field affect their MVP voting points.
+- $\beta_2$ is the the coefficient for 3P%. This reflects the impact of three-point shooting efficiency on MVP voting.
+- $\beta_3$ is the coefficient for FT%. This measures the influence of free throw shooting efficiency on MVP voting points.
+- $X_1$ measures the FG% made out of attempts.
+- $X_2$ measures the 3P% made out of attempts.
+- $X_3$ measures the FT% made out of attempts.
+- $\epsilon$ is the error term, representing the residual element not explained by the model. This captures the variability in MVP voting points not explained by shooting percentages alone.
 
 ### Model justification
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+The selection of linear regression for our analysis suggests linear relationships between the shooting metrics and MVP voting points. We hypothesized that improvements in these shooting metrics, reflecting enhanced performance in transition plays free from take fouls, would correlate positively with higher MVP voting scores. The use of FG%, 3P%, and FT% as predictors is justified by their direct impact on game performance, which is critical in MVP considerations. Moreover, these metrics are commonly used in basketball analytics to assess player efficiency and effectiveness, making them relevant for evaluating the consequences of rule changes.
 
-We can use maths by including latex between dollar signs, for instance $\theta$.
+Statistical significance of the model coefficients will be tested using t-tests, where a p-value less than 0.05 will indicate significant influence of the predictor on MVP voting points. The overall fit of the model will be assessed by the R-squared value, which explains the proportion of variance in MVP points accounted for by the predictors.
 
 
 # Results {#sec-results}
